@@ -34,7 +34,7 @@ const EFECTOS_POR_RAREZA = {
 let inventario = personaje.inventario
 
 // Costo de abrir una lootbox
-const COSTO_LOOTBOX = 50;
+const COSTO_LOOTBOX = 1000;
 
 // Efectos activos actualmente equipados
 let efectosActivos = {

@@ -3,12 +3,18 @@ let personaje = {
     nivel: 1,
     xp: 0,
     xpParaSubir: 10,
-    oro: 0,
+    oro: 1000,
     vidaMax: 100,
     vidaActual: 100,
     dañoAutomatico: 1,   // Daño automático cada X ms
     dañoClick: 25,        // Daño al hacer clic
-    inventario: []
+    inventario: [],
+    mult: {
+        daño : 1,
+        vidamax : 1,
+        xp : 1,
+        oro: 1
+    }
 };
 
 // Configuración del combate

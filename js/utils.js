@@ -13,23 +13,23 @@ function actualizarUI() {
     document.querySelector(".stat-dano-auto").textContent = personaje.dañoAutomatico;
     const bonusDaño = obtenerBonusPorTipo("daño");
     document.querySelector(".stat-dano-auto-bonus").textContent =
-        bonusDaño > 0 ? `+${bonusDaño} bonus` : "Sin bonus";
+        bonusDaño > 0 ? `X${bonusDaño} bonus` : "Sin bonus";
 
     // Mostrar daño clic y su bonus
     document.querySelector(".stat-dano-click").textContent = personaje.dañoClick;
     const bonusClick = obtenerBonusPorTipo("daño");
     document.querySelector(".stat-dano-click-bonus").textContent =
-        bonusClick > 0 ? `+${bonusClick} bonus` : "Sin bonus";
+        bonusClick > 0 ? `  X${bonusClick} bonus` : "Sin bonus";
 
     // Mostrar bonus de XP
     const bonusXP = obtenerBonusPorTipo("xp");
     document.querySelector(".stat-xp-bonus").textContent =
-        bonusXP > 0 ? `+${bonusXP} bonus` : "Sin bonus";
+        bonusXP > 0 ? ` X${bonusXP} bonus` : "Sin bonus";
 
     // Mostrar bonus de oro
     const bonusOro = obtenerBonusPorTipo("oro");
     document.querySelector(".stat-oro-bonus").textContent =
-        bonusOro > 0 ? `+${bonusOro} bonus` : "Sin bonus";
+        bonusOro > 0 ? `    X${bonusOro} bonus` : "Sin bonus";
 }
 
 // Mostrar texto de XP ganada
@@ -50,8 +50,8 @@ function MostrarXP(x, y, color = "pink") {
 }
 
 function darRecompensa() {
-    const xpGanada = 1 * personaje.nivel + Math.round(personaje.nivel * 0.8); // Puedes ajustar esta fórmula
-    const oroGanado = 2 * personaje.nivel;
+    const xpGanada = (1 * personaje.nivel + Math.round(personaje.nivel * 0.5)) * personaje.mult.xp;
+    const oroGanado = (2 * personaje.nivel + Math.round(personaje.nivel * 0.5)) * personaje.mult.oro;
     personaje.xp += xpGanada;
     personaje.oro += oroGanado;
     if (personaje.xp >= personaje.xpParaSubir) {
