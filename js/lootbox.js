@@ -1,5 +1,5 @@
 // Definición de rarezas y sus probabilidades
-const RARIDADES = [
+const RAREZA = [
     { nombre: "Común", probabilidad: 60, color: "green" },
     { nombre: "Raro", probabilidad: 25, color: "blue" },
     { nombre: "Épico", probabilidad: 10, color: "purple" },
@@ -7,7 +7,7 @@ const RARIDADES = [
 ];
 
 // Tabla de efectos por rareza
-const EFECTOS_POR_RARIDAD = {
+const EFECTOS_POR_RAREZA = {
     "Común": [
         { tipo: "daño", min: 1, max: 3 },
         { tipo: "xp", min: 1, max: 2 },
@@ -71,7 +71,7 @@ function abrirLootbox() {
     const rareza = obtenerRarezaAleatoria();
 
     // Seleccionar efecto aleatorio
-    const efectosDisponibles = EFECTOS_POR_RARIDAD[rareza.nombre];
+    const efectosDisponibles = EFECTOS_POR_RAREZA[rareza.nombre];
     const efecto = efectosDisponibles[Math.floor(Math.random() * efectosDisponibles.length)];
 
     // Generar valor aleatorio entre min y max
@@ -158,7 +158,7 @@ function abrirLootbox() {
         </span>
         <br>
         <small>(Probabilidad: ${rareza.probabilidad}% | Rareza: ${rareza.nombre})</small>
-    `;
+`;
 
     // Actualizar inventario en pantalla
     mostrarInventario();
@@ -171,15 +171,15 @@ function randomRange(min, max) {
 
 // Función para seleccionar rareza aleatoria
 function obtenerRarezaAleatoria() {
-    let total = RARIDADES.reduce((sum, r) => sum + r.probabilidad, 0);
+    let total = RAREZA.reduce((sum, r) => sum + r.probabilidad, 0);
     let random = Math.random() * total;
 
-    for (let r of RARIDADES) {
+    for (let r of RAREZA) {
         if (random < r.probabilidad) return r;
         random -= r.probabilidad;
     }
 
-    return RARIDADES[RARIDADES.length - 1]; // Por defecto
+    return RAREZA[RAREZA.length - 1]; // Por defecto
 }
 
 // Mostrar inventario
@@ -193,7 +193,7 @@ function mostrarInventario() {
     }
 
     inventario.forEach((item, index) => {
-        const rareza = RARIDADES.find(r => r.nombre === item.rareza);
+        const rareza = RAREZA.find(r => r.nombre === item.rareza);
 
         const itemDiv = document.createElement("div");
         itemDiv.className = "inventario-item";
@@ -220,23 +220,18 @@ function mostrarInventario() {
 function equiparObjeto(index) {
     const item = inventario[index];
     if (!item) return;
-
     const tipo = item.tipo;
-
     // Desactivar efecto anterior del mismo tipo
     if (efectosActivos[tipo]) {
         const idAnterior = efectosActivos[tipo];
         const itemAnterior = inventario.find(i => i.id === idAnterior);
         if (itemAnterior) itemAnterior.equipado = false;
     }
-
     // Equipar este objeto
     item.equipado = true;
     efectosActivos[tipo] = item.id;
-
     // Aplicar nuevo estilo visual
     actualizarEstiloPersonaje();
-
     // Actualizar UI
     actualizarUI();
     mostrarInventario();
