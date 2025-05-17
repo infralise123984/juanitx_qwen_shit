@@ -47,7 +47,8 @@ body {
     left: 50%;
     transform: translateX(-50%); */
     z-index: 2;
-    user-select: none
+    user-select: none;
+    transition: 1ms all;
 }
 
 /* ================== */

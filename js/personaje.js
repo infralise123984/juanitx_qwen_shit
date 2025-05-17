@@ -7,7 +7,8 @@ let personaje = {
     vidaMax: 100,
     vidaActual: 100,
     dañoAutomatico: 1,   // Daño automático cada X ms
-    dañoClick: 25        // Daño al hacer clic
+    dañoClick: 25,        // Daño al hacer clic
+    inventario: []
 };
 
 // Configuración del combate

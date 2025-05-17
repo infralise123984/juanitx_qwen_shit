@@ -31,7 +31,7 @@ const EFECTOS_POR_RAREZA = {
 };
 
 // Inventario del jugador
-let inventario = [];
+let inventario = personaje.inventario
 
 // Costo de abrir una lootbox
 const COSTO_LOOTBOX = 50;
