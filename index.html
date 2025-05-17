@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego Idle + Clicker</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- Miniatura fija del personaje -->
+    <div class="miniatura-personaje-container">
+        <img src="personaje.png" id="miniatura-personaje" alt="Miniatura Personaje" draggable="false">
+    </div>
+    
+    <div class="stats">
+        <p><span class="stat-label">Nivel:</span> <span class="stat-value stat-nivel">1</span></p>
+        <p><span class="stat-label">XP:</span> <span class="stat-value stat-xp">0</span> / <span
+                class="stat-value stat-xp-necesario">10</span></p>
+        <p><span class="stat-label">Oro:</span> <span class="stat-value stat-oro">0</span></p>
+        <p><span class="stat-label">Vida:</span> <span class="stat-value stat-vida">100</span></p>
+
+        <!-- Daño automático -->
+        <p>
+            <span class="stat-label">Daño automático:</span>
+            <span class="stat-value stat-dano-auto">10</span>
+            <span class="stat-value stat-dano-auto-bonus">(Sin bonus)</span>
+        </p>
+
+        <!-- Daño por clic -->
+        <p>
+            <span class="stat-label">Daño por clic:</span>
+            <span class="stat-value stat-dano-click">25</span>
+            <span class="stat-value stat-dano-click-bonus">(Sin bonus)</span>
+        </p>
+
+        <!-- Bonus adicionales -->
+        <p><span class="stat-label">XP Bonus:</span> <span class="stat-value stat-xp-bonus">(Sin bonus)</span></p>
+        <p><span class="stat-label">Oro Bonus:</span> <span class="stat-value stat-oro-bonus">(Sin bonus)</span></p>
+    </div>
+
+    <!-- Título -->
+    <h1 class="titulo">⚔️ Juego Idle + Clicker</h1>
+
+    <!-- Contenedor del juego -->
+    <div class="game-container">
+        <!-- Personaje -->
+        <img src="personaje.png" class="personaje" alt="Personaje" draggable="false">
+        <!-- <div class="radio-ataque"></div> -->
+
+        <!-- Enemigos aparecerán aquí dinámicamente -->
+        <div class="enemies-container" draggable="false"></div>
+    </div>
+
+    
+    <!-- En tu HTML -->
+    <div class="lootbox-container">
+        <!-- <img id="personaje" src="personaje.png" alt="Personaje" class="personaje boton-loot"/> -->
+        <div id="resultado"></div>
+        <button onclick="abrirLootbox()" class="boton-loot">Abrir Lootbox</button>
+        <div id="resultado"></div>
+
+
+        <h3>Inventario</h3>
+        <div id="inventario">
+            <em>Inventario vacío</em>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="js/lootbox.js"></script>
+    <script src="js/game.js"></script>
+</body>
+
+</html>

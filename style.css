@@ -1,0 +1,222 @@
+/* ==================== */
+/* === Estilo general === */
+/* ==================== */
+
+body {
+    font-family: sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #84aeb9;
+    color: #000000;
+}
+
+.titulo {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+/* ====================== */
+/* === Contenedor juego === */
+/* ====================== */
+
+.game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    background-color: #84aeb9;
+    overflow: hidden;
+    border-radius: 50px;
+    border-radius: 50px;
+    background: #84aeb9;
+    box-shadow: inset 37px 37px 74px #70949d,
+        inset -37px -37px 74px #98c8d5;
+}
+
+/* ================== */
+/* === Personaje ==== */
+/* ================== */
+
+.personaje {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    /* bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%); */
+    z-index: 2;
+    user-select: none
+}
+
+/* ================== */
+/* === Enemigos ===== */
+/* ================== */
+
+.enemies-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.enemigo {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    transition: all 0.2s linear;
+    pointer-events: auto;
+    z-index: 1;
+    user-select: none
+}
+
+.daño-text {
+    position: absolute;
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+    animation: subir 1s ease-out forwards;
+    pointer-events: none;
+    user-select: none;
+    z-index: 3;
+}
+
+.vida-enemigo-text {
+    user-select: none;
+}
+
+
+.level-up-text {
+    position: absolute;
+    animation: pop 1s ease-out forwards;
+    user-select: none
+}
+
+@keyframes pop {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.xp-text {
+    position: absolute;
+    color: rgb(255, 0, 200);
+    font-weight: bold;
+    font-size: 16px;
+    animation: subir 1s ease-out forwards;
+    pointer-events: none;
+    user-select: none;
+    z-index: 3;
+}
+
+@keyframes subir {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+}
+
+/* ================== */
+/* === Panel stats === */
+/* ================== */
+
+.stats {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 300px;
+    z-index: 1000; /* Asegura que esté encima */
+    width: auto;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stat-value {
+    color: #e67e22;
+    margin-left: 5px;
+}
+
+.boton-loot {
+    padding: 20px;
+    margin: 20px;
+}
+
+.inventario-item {
+    padding: 10px;
+    margin: 9px 20%;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inventario-item button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.inventario-item button:hover {
+    background-color: #45a049;
+}
+
+.miniatura-personaje-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 420px; /* Tamaño deseado */
+    height: auto;
+    z-index: 1000; /* Para que esté encima de otros elementos */
+    border: 3px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#miniatura-personaje {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+    transition: filter 0.3s ease;
+}
