@@ -1,3 +1,4 @@
+const INTERVALO_GENERAR_ENEMIGO = 1000;
 let enemigos = [];
 function mostrarVidaEnemigo(enemigo) {
     // Si ya existe un texto, lo eliminamos antes de crear uno nuevo
@@ -20,12 +21,12 @@ function mostrarVidaEnemigo(enemigo) {
     enemigo.textoVida = vidaText;
 }
 
-function actualizarPosicionTextoVida(enemigo) {
-    if (enemigo.textoVida) {
-        enemigo.textoVida.style.left = `${enemigo.x + 32}px`;
-        enemigo.textoVida.style.top = `${enemigo.y - 20}px`;
-    }
-}
+// function actualizarPosicionTextoVida(enemigo) {
+//     if (enemigo.textoVida) {
+//         enemigo.textoVida.style.left = `${enemigo.x + 32}px`;
+//         enemigo.textoVida.style.top = `${enemigo.y - 20}px`;
+//     }
+// }
 
 
 
@@ -37,13 +38,13 @@ function moverEnemigos() {
         const dx = personajeX - enemigo.x;
         const dy = personajeY - enemigo.y;
         const dist = Math.hypot(dx, dy);
-        const speed = 1;
+        const speed = 2;
         enemigo.x += (dx / dist) * speed;
         enemigo.y += (dy / dist) * speed;
         enemigo.elemento.style.left = `${enemigo.x}px`;
         enemigo.elemento.style.top = `${enemigo.y}px`;
-
-        actualizarPosicionTextoVida(enemigo);
+        enemigo.textoVida.style.left = `${enemigo.x + 32}px`;
+        enemigo.textoVida.style.top = `${enemigo.y - 20}px`;
     });
 }
 
@@ -53,7 +54,7 @@ function generarEnemigo() {
     const img = document.createElement("img");
     img.src = "enemigo.png";
     img.classList.add("enemigo");
-    img.draggable = false
+    img.draggable = false;
 
     // Posicionar enemigo aleatoriamente fuera de la pantalla
     let x, y;

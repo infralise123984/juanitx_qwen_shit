@@ -18,8 +18,7 @@ let personaje = {
 };
 
 // Configuración del combate
-const RADIO_ATAQUE = 200; // radio en píxeles donde el personaje ataca
-const INTERVALO_GENERAR_ENEMIGO = 800;
+const RADIO_ATAQUE = 150; // radio en píxeles donde el personaje ataca
 // Posición central del personaje (se calcula después)
 let PERSONAJE_X = 0;
 let PERSONAJE_Y = 0;

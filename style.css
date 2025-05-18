@@ -48,7 +48,7 @@ body {
     transform: translateX(-50%); */
     z-index: 2;
     user-select: none;
-    transition: 1ms all;
+    transition: filter 0.3s ease;
 }
 
 /* ================== */
@@ -158,7 +158,8 @@ body {
     font-size: 1rem;
     line-height: 1.6;
     max-width: 300px;
-    z-index: 1000; /* Asegura que esté encima */
+    z-index: 1000;
+    /* Asegura que esté encima */
     width: auto;
 }
 
@@ -204,14 +205,18 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    width: 420px; /* Tamaño deseado */
+    width: 420px;
+    /* Tamaño deseado */
     height: auto;
-    z-index: 1000; /* Para que esté encima de otros elementos */
-    border: 3px solid #fff;
-    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    /* Para que esté encima de otros elementos */
     padding: 5px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 #miniatura-personaje {
