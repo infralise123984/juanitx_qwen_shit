@@ -41,4 +41,7 @@ Es un juego sencillo donde:
 - Puedes abrir cajas que dan efectos visuales y bonificaciones.
 
 ## ¿Cómo iniciar el proyecto?
-- npm run dev
+```
+npm run dev
+```
+
