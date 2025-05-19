@@ -40,3 +40,5 @@ Es un juego sencillo donde:
 - Al matarlos ganas XP y oro.
 - Puedes abrir cajas que dan efectos visuales y bonificaciones.
 
+## ¿Cómo iniciar el proyecto?
+- npm run dev
