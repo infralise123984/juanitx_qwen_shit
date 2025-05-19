@@ -1,62 +1,74 @@
-let enemigos = [];
-function mostrarVidaEnemigo(enemigo) {
+import { PlayerStats } from "../../types";
+import type { Enemy } from "../../types/enemy.types";
+import { actualizarUI, darRecompensa, mostrarDaño, mostrarLevelUp, MostrarXP } from "../../utils";
+import { getPersonajePos, subirNivel } from "../player/player";
+
+let enemies: Enemy[] = [];
+
+// mostrar vida enemigo
+export function enemyLife(enemy: Enemy) {
     // Si ya existe un texto, lo eliminamos antes de crear uno nuevo
-    if (enemigo.textoVida) {
-        enemigo.textoVida.remove();
+    if (enemy.textoVida) {
+        enemy.textoVida.remove();
     }
     const vidaText = document.createElement("div");
     vidaText.className = "vida-enemigo-text";
-    vidaText.innerText = `${Math.max(0, Math.floor(enemigo.vida))}`;
+    vidaText.innerText = `${Math.max(0, Math.floor(enemy.vida))}`;
     vidaText.style.position = "absolute";
-    vidaText.style.left = `${enemigo.x + 32}px`;
-    vidaText.style.top = `${enemigo.y - 20}px`;
+    vidaText.style.left = `${enemy.x + 32}px`;
+    vidaText.style.top = `${enemy.y - 20}px`;
     vidaText.style.color = "white";
     vidaText.style.fontSize = "14px";
     vidaText.style.fontWeight = "bold";
     vidaText.style.textShadow = "1px 1px 2px black";
     vidaText.style.pointerEvents = "none";
-    document.querySelector(".enemies-container").appendChild(vidaText);
-    // Guardar referencia en el objeto enemigo
-    enemigo.textoVida = vidaText;
+
+    const container = document.querySelector(".enemies-container");
+    if (container) {
+        container.appendChild(vidaText);
+        // Guardar referencia en el objeto enemigo
+        enemy.textoVida = vidaText;
+    }
 }
 
-function actualizarPosicionTextoVida(enemigo) {
-    if (enemigo.textoVida) {
-        enemigo.textoVida.style.left = `${enemigo.x + 32}px`;
-        enemigo.textoVida.style.top = `${enemigo.y - 20}px`;
+function refreshEnemyLife(enemy: Enemy) {
+    if (enemy.textoVida) {
+        enemy.textoVida.style.left = `${enemy.x + 32}px`;
+        enemy.textoVida.style.top = `${enemy.y - 20}px`;
     }
 }
 
 
-
 // Mover enemigos hacia el personaje
-function moverEnemigos() {
+export function moverEnemigos() {
     const { x: personajeX, y: personajeY } = getPersonajePos();
-    enemigos.forEach((enemigo) => {
-        if (!enemigo.vivo) return;
-        const dx = personajeX - enemigo.x;
-        const dy = personajeY - enemigo.y;
+    enemies.forEach((enemy) => {
+        if (!enemy.vivo) return;
+        const dx = personajeX - enemy.x;
+        const dy = personajeY - enemy.y;
         const dist = Math.hypot(dx, dy);
         const speed = 1;
-        enemigo.x += (dx / dist) * speed;
-        enemigo.y += (dy / dist) * speed;
-        enemigo.elemento.style.left = `${enemigo.x}px`;
-        enemigo.elemento.style.top = `${enemigo.y}px`;
+        enemy.x += (dx / dist) * speed;
+        enemy.y += (dy / dist) * speed;
+        enemy.elemento.style.left = `${enemy.x}px`;
+        enemy.elemento.style.top = `${enemy.y}px`;
 
-        actualizarPosicionTextoVida(enemigo);
+        refreshEnemyLife(enemy);
     });
 }
 
-function generarEnemigo() {
+// Generar un enemigo aleatorio fuera de la pantalla
+export function generarEnemigo() {
     const container = document.querySelector(".enemies-container");
+    if (!container) return;
 
     const img = document.createElement("img");
-    img.src = "enemigo.png";
+    img.src = "/images/enemigo.png";
     img.classList.add("enemigo");
-    img.draggable = false
+    img.draggable = false;
 
     // Posicionar enemigo aleatoriamente fuera de la pantalla
-    let x, y;
+    let x: number, y: number;
     const lado = Math.floor(Math.random() * 4); // 0-3: arriba, abajo, izq, der
 
     switch (lado) {
@@ -76,6 +88,9 @@ function generarEnemigo() {
             x = 800;
             y = Math.random() * 600;
             break; // derecha
+        default:
+            x = 0;
+            y = 0;
     }
 
     img.style.left = `${x}px`;
@@ -83,58 +98,45 @@ function generarEnemigo() {
 
     // Añadir evento de clic para atacar
     img.addEventListener("click", () => {
-        const enemigo = enemigos.find(e => e.elemento === img);
-        if (!enemigo || !enemigo.vivo) return;
+        const enemy = enemies.find(e => e.elemento === img);
+        if (!enemy?.vivo) return;
 
         // Aplicar daño por clic
-        enemigo.vida -= personaje.dañoClick;
-        mostrarVidaEnemigo(enemigo);
+        enemy.vida -= PlayerStats.clickDamage;
+        enemyLife(enemy);
 
-        if (enemigo.vida <= 0) {
-            enemigo.vivo = false;
+        if (enemy.vida <= 0) {
+            enemy.vivo = false;
             img.remove();
-            MostrarXP(enemigo.x, enemigo.y);
+            MostrarXP(enemy.x, enemy.y);
             darRecompensa(); // Dar XP y oro basados en el nivel actual
 
-            if (personaje.xp >= personaje.xpParaSubir) {
+            if (PlayerStats.xp >= PlayerStats.levelUpExp) {
                 subirNivel();
                 const { x, y } = getPersonajePos();
                 mostrarLevelUp(x, y);
             }
             actualizarUI();
-            if (enemigo.textoVida) {
-                enemigo.textoVida.remove();
-                enemigo.textoVida = null;
+            if (enemy.textoVida) {
+                enemy.textoVida.remove();
+                enemy.textoVida = null;
             }
         }
 
         // Mostrar texto de daño
-        mostrarDaño(personaje.dañoClick, enemigo.x, enemigo.y);
+        mostrarDaño(PlayerStats.clickDamage, enemy.x, enemy.y);
     });
 
     container.appendChild(img);
 
-    enemigos.push({
+    enemies.push({
         id: Math.random().toString(36).substr(2, 9),
         x,
         y,
-        vida: 50 * personaje.nivel,
+        vida: 50 * PlayerStats.level,
         elemento: img,
         vivo: true,
         textoVida: null // Inicializamos el texto de vida
     });
-    mostrarVidaEnemigo(enemigos[enemigos.length - 1]); // Mostrar vida inicial
-}
-
-function mostrarDaño(daño, x, y, color = "red") {
-    const dañoText = document.createElement("div");
-    dañoText.className = "daño-text";
-    dañoText.innerText = `-${daño}`;
-    dañoText.style.left = `${x + 32}px`;
-    dañoText.style.top = `${y + 40}px`;
-    dañoText.style.color = color;
-    document.querySelector(".enemies-container").appendChild(dañoText);
-    setTimeout(() => {
-        dañoText.remove();
-    }, 1000);
+    enemyLife(enemies[enemies.length - 1]); // Mostrar vida inicial
 }

@@ -1,3 +1,7 @@
+import type { Enemy } from "../../types/enemy.types";
+import { actualizarUI, calcularDistancia, darRecompensa, gameContainer, mostrarDaño, mostrarLevelUp, MostrarXP, personajeImg } from "../../utils";
+import { enemyLife } from "../enemies/enemies";
+
 // Datos del personaje
 let personaje = {
     nivel: 1,
@@ -18,25 +22,26 @@ let personaje = {
 };
 
 // Configuración del combate
-const RADIO_ATAQUE = 200; // radio en píxeles donde el personaje ataca
-const INTERVALO_GENERAR_ENEMIGO = 800;
-// Posición central del personaje (se calcula después)
-let PERSONAJE_X = 0;
-let PERSONAJE_Y = 0;
+const atackRadius = 200; // radio en píxeles donde el personaje ataca
 
-function atacarEnemigosCercanos() {
+let enemies: Enemy[] = [];
+
+export function atacarEnemigosCercanos() {
     const { x: personajeX, y: personajeY } = getPersonajePos(); // Usamos la posición real
-    enemigos.forEach((enemigo) => {
-        if (!enemigo.vivo) return;
-        let distancia = calcularDistancia(personajeX, personajeY, enemigo.x, enemigo.y);
-        if (distancia <= RADIO_ATAQUE) {
-            enemigo.vida -= personaje.dañoAutomatico;
-            mostrarVidaEnemigo(enemigo);
-            mostrarDaño(personaje.dañoAutomatico, enemigo.x, enemigo.y, "blue");
-            if (enemigo.vida <= 0) {
-                MostrarXP(enemigo.x, enemigo.y);
-                enemigo.vivo = false;
-                enemigo.elemento.remove();
+    enemies.forEach((enemy) => {
+        if (!enemy.vivo) return;
+        let distancia = calcularDistancia({
+            player: { x: personajeX, y: personajeY },
+            enemy: { x: enemy.x, y: enemy.y }
+        });
+        if (distancia <= atackRadius) {
+            enemy.vida -= personaje.dañoAutomatico;
+            enemyLife(enemy);
+            mostrarDaño(personaje.dañoAutomatico, enemy.x, enemy.y, "blue");
+            if (enemy.vida <= 0) {
+                MostrarXP(enemy.x, enemy.y);
+                enemy.vivo = false;
+                enemy.elemento.remove();
                 darRecompensa(); // Dar XP y oro basados en el nivel actual
                 if (personaje.xp >= personaje.xpParaSubir) {
                     subirNivel();
@@ -44,16 +49,16 @@ function atacarEnemigosCercanos() {
                     mostrarLevelUp(x, y);
                 }
                 actualizarUI();
-                if (enemigo.textoVida) {
-                    enemigo.textoVida.remove();
-                    enemigo.textoVida = null;
+                if (enemy.textoVida) {
+                    enemy.textoVida.remove();
+                    enemy.textoVida = null;
                 }
             }
         }
     });
 }
 
-function subirNivel() {
+export function subirNivel() {
     personaje.nivel++;
     personaje.xp = 0;
     personaje.xpParaSubir = Math.floor(personaje.xpParaSubir * 1.5);
@@ -63,14 +68,12 @@ function subirNivel() {
     personaje.dañoClick += 10;
 }
 
-// Seleccionar elementos del DOM
-const gameContainer = document.querySelector(".game-container");
-const personajeImg = document.querySelector(".personaje");
-
-
-
 // Función para obtener coordenadas reales del centro del personaje
 export function getPersonajePos() {
+    if (!personajeImg || !gameContainer) {
+        // Return a default position or handle the error as needed
+        return { x: 0, y: 0 };
+    }
     const rect = personajeImg.getBoundingClientRect();
     const containerRect = gameContainer.getBoundingClientRect();
 

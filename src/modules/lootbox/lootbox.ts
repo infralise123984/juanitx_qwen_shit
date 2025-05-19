@@ -1,3 +1,6 @@
+import { PlayerStats } from "../../types";
+import { actualizarUI } from "../../utils";
+
 // Definición de rarezas y sus probabilidades
 const RAREZA = [
     { nombre: "Común", probabilidad: 60, color: "green" },
@@ -6,8 +9,11 @@ const RAREZA = [
     { nombre: "Legendario", probabilidad: 5, color: "orange" }
 ];
 
+// Definir tipo de rareza como string literal type
+type RarezaNombre = "Común" | "Raro" | "Épico" | "Legendario";
+
 // Tabla de efectos por rareza
-const EFECTOS_POR_RAREZA = {
+const EFECTOS_POR_RAREZA: Record<RarezaNombre, { tipo: string; min: number; max: number; }[]> = {
     "Común": [
         { tipo: "daño", min: 1, max: 3 },
         { tipo: "xp", min: 1, max: 2 },
@@ -31,13 +37,29 @@ const EFECTOS_POR_RAREZA = {
 };
 
 // Inventario del jugador
-let inventario = personaje.inventario
+type InventarioItem = {
+    id: number;
+    nombre: string;
+    tipo: string;
+    valor: number;
+    rareza: string;
+    color: string;
+    filtro: string;
+    transform: string;
+    boxShadow: string;
+    equipado: boolean;
+    claseEstilo?: string; // Añadido para evitar el error de propiedad inexistente
+};
+let inventario: InventarioItem[] = PlayerStats.inventory as InventarioItem[];
 
 // Costo de abrir una lootbox
 const COSTO_LOOTBOX = 1000;
 
 // Efectos activos actualmente equipados
-let efectosActivos = {
+type EfectoTipo = "daño" | "xp" | "oro";
+type EfectosActivos = { [key in EfectoTipo]: number | null };
+
+let efectosActivos: EfectosActivos = {
     daño: null,
     xp: null,
     oro: null
@@ -48,30 +70,29 @@ let estiloOriginalPersonaje = "";
 
 // Función para aplicar estilo inicial al cargar la página
 window.addEventListener("load", () => {
-    const personajeImg = document.querySelector(".personaje");
+    const personajeImg = document.querySelector(".personaje") as HTMLElement;
     if (personajeImg) {
         estiloOriginalPersonaje = personajeImg.style.filter || "";
     }
 });
 
-function abrirLootbox() {
+export function abrirLootbox() {
     const resultadoDiv = document.getElementById("resultado");
 
     // Verificar si tiene suficiente oro
-    if (personaje.oro < COSTO_LOOTBOX) {
-        resultadoDiv.innerHTML = `<span style="color:red">No tienes suficiente oro.</span>`;
+    if (PlayerStats.gold < COSTO_LOOTBOX) {
+        if (resultadoDiv) {
+            resultadoDiv.innerHTML = `<span style="color:red">No tienes suficiente oro.</span>`;
+        }
         return;
     }
 
     // Restar oro
-    personaje.oro -= COSTO_LOOTBOX;
-    actualizarUI();
-
     // Seleccionar rareza basada en probabilidad
     const rareza = obtenerRarezaAleatoria();
 
     // Seleccionar efecto aleatorio
-    const efectosDisponibles = EFECTOS_POR_RAREZA[rareza.nombre];
+    const efectosDisponibles = EFECTOS_POR_RAREZA[rareza.nombre as RarezaNombre];
     const efecto = efectosDisponibles[Math.floor(Math.random() * efectosDisponibles.length)];
 
     // Generar valor aleatorio entre min y max
@@ -101,7 +122,7 @@ function abrirLootbox() {
         }
     };
 
-    const rango = RANGO_FILTRO_POR_RARIDAD[rareza.nombre];
+    const rango = RANGO_FILTRO_POR_RARIDAD[rareza.nombre as RarezaNombre];
 
     // Generar valores visuales dinámicos
     const hue = Math.floor(Math.random() * 360);
@@ -112,12 +133,22 @@ function abrirLootbox() {
     const shadowBlur = randomRange(rango.shadowBlur[0], rango.shadowBlur[1]);
 
     // Escala y rotación según rareza
-    const scale = rareza.nombre === "Legendario" ? 1.05 : rareza.nombre === "Épico" ? 1.02 : 1;
-    const rotate = rareza.nombre === "Legendario"
-        ? `${randomRange(-5, 5)}deg`
-        : rareza.nombre === "Épico"
-            ? `${randomRange(-2, 2)}deg`
-            : "0deg";
+    let scale: number;
+    if (rareza.nombre === "Legendario") {
+        scale = 1.05;
+    } else if (rareza.nombre === "Épico") {
+        scale = 1.02;
+    } else {
+        scale = 1;
+    }
+    let rotate: string;
+    if (rareza.nombre === "Legendario") {
+        rotate = `${randomRange(-5, 5)}deg`;
+    } else if (rareza.nombre === "Épico") {
+        rotate = `${randomRange(-2, 2)}deg`;
+    } else {
+        rotate = "0deg";
+    }
 
     const filterStyle = `
         hue-rotate(${hue}deg)
@@ -128,16 +159,27 @@ function abrirLootbox() {
 
     const transformStyle = `scale(${scale}) rotate(${rotate})`;
 
-    const boxShadowStyle = rareza.nombre === "Legendario"
-        ? `0 0 ${randomRange(10, 15)}px rgba(255, 215, 0, 0.7)`
-        : rareza.nombre === "Épico"
-            ? `0 0 ${randomRange(5, 10)}px rgba(128, 0, 128, 0.5)`
-            : "none";
+    let boxShadowStyle: string;
+    if (rareza.nombre === "Legendario") {
+        boxShadowStyle = `0 0 ${randomRange(10, 15)}px rgba(255, 215, 0, 0.7)`;
+    } else if (rareza.nombre === "Épico") {
+        boxShadowStyle = `0 0 ${randomRange(5, 10)}px rgba(128, 0, 128, 0.5)`;
+    } else {
+        boxShadowStyle = "none";
+    }
 
     // Crear objeto obtenido
+    let nombreEfecto: string;
+    if (efecto.tipo === "daño") {
+        nombreEfecto = "Gema de Daño";
+    } else if (efecto.tipo === "xp") {
+        nombreEfecto = "Esencia de XP";
+    } else {
+        nombreEfecto = "Monedas Mágicas";
+    }
     const objeto = {
         id: Date.now(),
-        nombre: `${rareza.nombre} ${efecto.tipo === "daño" ? "Gema de Daño" : efecto.tipo === "xp" ? "Esencia de XP" : "Monedas Mágicas"}`,
+        nombre: `${rareza.nombre} ${nombreEfecto}`,
         tipo: efecto.tipo,
         valor,
         rareza: rareza.nombre,
@@ -152,20 +194,24 @@ function abrirLootbox() {
     inventario.push(objeto);
 
     // Mostrar resultado
-    resultadoDiv.innerHTML = `
+    if (resultadoDiv) {
+        resultadoDiv.innerHTML = `
         <span style="color:${rareza.color}">
             🎁 Obtuviste: <strong>${objeto.nombre}</strong> (+${objeto.valor} ${objeto.tipo.toUpperCase()})
         </span>
         <br>
         <small>(Probabilidad: ${rareza.probabilidad}% | Rareza: ${rareza.nombre})</small>
-`;
+    `;
+    }
 
     // Actualizar inventario en pantalla
     mostrarInventario();
 }
 
+(window as any).abrirLootbox = abrirLootbox;
+
 // Función auxiliar para generar números aleatorios entre min y max
-function randomRange(min, max) {
+function randomRange(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -185,6 +231,7 @@ function obtenerRarezaAleatoria() {
 // Mostrar inventario
 function mostrarInventario() {
     const inventarioDiv = document.getElementById("inventario");
+    if (!inventarioDiv) return;
     inventarioDiv.innerHTML = "";
 
     if (inventario.length === 0) {
@@ -197,7 +244,7 @@ function mostrarInventario() {
 
         const itemDiv = document.createElement("div");
         itemDiv.className = "inventario-item";
-        itemDiv.style.border = `2px solid ${rareza.color}`;
+        itemDiv.style.border = `2px solid ${(rareza?.color ?? "gray")}`;
 
         let botonEquipar = '';
         if (item.equipado) {
@@ -207,7 +254,7 @@ function mostrarInventario() {
         }
 
         itemDiv.innerHTML = `
-            <span style="color:${rareza.color}">
+            <span style="color:${rareza?.color ?? 'gray'}">
                 🎖️ ${item.nombre} (+${item.valor} ${item.tipo.toUpperCase()})
             </span>
             ${botonEquipar}
@@ -217,10 +264,10 @@ function mostrarInventario() {
 }
 
 // Equipar un objeto
-function equiparObjeto(index) {
+function equiparObjeto(index: number) {
     const item = inventario[index];
     if (!item) return;
-    const tipo = item.tipo;
+    const tipo = item.tipo as EfectoTipo;
     // Desactivar efecto anterior del mismo tipo
     if (efectosActivos[tipo]) {
         const idAnterior = efectosActivos[tipo];
@@ -238,11 +285,11 @@ function equiparObjeto(index) {
 }
 
 // Desequipar un objeto
-function desequiparObjeto(index) {
+function desequiparObjeto(index: number) {
     const item = inventario[index];
     if (!item || !item.equipado) return;
 
-    const tipo = item.tipo;
+    const tipo = item.tipo as EfectoTipo;
 
     // Si es el que está equipado, lo eliminamos
     if (efectosActivos[tipo] === item.id) {
@@ -258,37 +305,38 @@ function desequiparObjeto(index) {
     mostrarInventario();
 }
 
+// Attach to window for HTML onclick access
+(window as any).equiparObjeto = equiparObjeto;
+(window as any).desequiparObjeto = desequiparObjeto;
+
 // Aplicar estilo visual a ambos personajes (principal y miniatura)
 function actualizarEstiloPersonaje() {
-    const personajeImg = document.querySelector(".personaje");
-    const miniaturaImg = document.getElementById("miniatura-personaje");
+    const personajeImg = document.querySelector(".personaje") as HTMLElement | null;
+    const miniaturaImg = document.getElementById("miniatura-personaje") as HTMLElement | null;
 
     if (!personajeImg || !miniaturaImg) return;
 
-    // Buscar objeto equipado con estilo
-    const objetoEquipado = inventario.find(i => i.equipado && i.filtro);
+    // Eliminar cualquier clase anterior de estilo
+    personajeImg.classList.remove(...personajeImg.classList);
+    miniaturaImg.classList.remove(...miniaturaImg.classList);
 
-    if (objetoEquipado) {
-        personajeImg.style.filter = objetoEquipado.filtro;
-        personajeImg.style.transform = objetoEquipado.transform;
-        personajeImg.style.boxShadow = objetoEquipado.boxShadow;
+    personajeImg.classList.add("personaje");
+    miniaturaImg.classList.add("miniatura-personaje");
 
-        miniaturaImg.style.filter = objetoEquipado.filtro;
-        miniaturaImg.style.transform = objetoEquipado.transform;
-        miniaturaImg.style.boxShadow = objetoEquipado.boxShadow;
+    const objetoEquipado = inventario.find(i => i.equipado && i.claseEstilo);
+
+    if (objetoEquipado?.claseEstilo) {
+        personajeImg.classList.add(objetoEquipado.claseEstilo);
+        miniaturaImg.classList.add(objetoEquipado.claseEstilo);
     } else {
-        personajeImg.style.filter = estiloOriginalPersonaje;
-        personajeImg.style.transform = "scale(1) rotate(0deg)";
-        personajeImg.style.boxShadow = "none";
-
-        miniaturaImg.style.filter = estiloOriginalPersonaje;
-        miniaturaImg.style.transform = "scale(1) rotate(0deg)";
-        miniaturaImg.style.boxShadow = "none";
+        personajeImg.classList.add("personaje-estilo-default");
+        miniaturaImg.classList.add("personaje-estilo-default");
     }
 }
 
+
 // Devuelve el BONUS (no el total con multiplicación)
-function obtenerBonusPorTipo(tipo) {
+export function obtenerBonusPorTipo(tipo: EfectoTipo): number {
     const efecto = inventario.find(i => i.id === efectosActivos[tipo]);
     return efecto ? efecto.valor : 0;
 }
