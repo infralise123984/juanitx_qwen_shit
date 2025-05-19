@@ -1,3 +1,4 @@
+import { enemies } from "../../data/enemyState";
 import type { Enemy } from "../../types/enemy.types";
 import { actualizarUI, calcularDistancia, darRecompensa, gameContainer, mostrarDaño, mostrarLevelUp, MostrarXP, personajeImg } from "../../utils";
 import { enemyLife } from "../enemies/enemies";
@@ -23,8 +24,6 @@ let personaje = {
 
 // Configuración del combate
 const atackRadius = 200; // radio en píxeles donde el personaje ataca
-
-let enemies: Enemy[] = [];
 
 export function atacarEnemigosCercanos() {
     const { x: personajeX, y: personajeY } = getPersonajePos(); // Usamos la posición real

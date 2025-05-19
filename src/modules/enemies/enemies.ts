@@ -1,9 +1,8 @@
+import { enemies } from "../../data/enemyState";
 import { PlayerStats } from "../../types";
 import type { Enemy } from "../../types/enemy.types";
 import { actualizarUI, darRecompensa, mostrarDaño, mostrarLevelUp, MostrarXP } from "../../utils";
 import { getPersonajePos, subirNivel } from "../player/player";
-
-let enemies: Enemy[] = [];
 
 // mostrar vida enemigo
 export function enemyLife(enemy: Enemy) {
