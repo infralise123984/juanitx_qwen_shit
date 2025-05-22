@@ -83,10 +83,18 @@ body {
     pointer-events: none;
     user-select: none;
     z-index: 3;
+    pointer-events: none;
+    user-select: none;
 }
 
 .vida-enemigo-text {
     user-select: none;
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+
 }
 
 

@@ -6,21 +6,9 @@
             "probabilidad": 60,
             "color": "green",
             "efectos": [
-                {
-                    "tipo": "daño",
-                    "min": 1,
-                    "max": 3
-                },
-                {
-                    "tipo": "xp",
-                    "min": 1,
-                    "max": 3
-                },
-                {
-                    "tipo": "oro",
-                    "min": 1,
-                    "max": 3
-                }
+                {"tipo": "daño","min": 1,"max": 3},
+                {"tipo": "xp",  "min": 1,"max": 3},
+                {"tipo": "oro", "min": 1,"max": 3}
             ]
         },
         {
@@ -29,21 +17,9 @@
             "probabilidad": 25,
             "color": "blue",
             "efectos": [
-                {
-                    "tipo": "daño",
-                    "min": 3,
-                    "max": 6
-                },
-                {
-                    "tipo": "xp",
-                    "min": 2,
-                    "max": 4
-                },
-                {
-                    "tipo": "oro",
-                    "min": 5,
-                    "max": 8
-                }
+                {"tipo": "daño","min": 3,"max": 6},
+                {"tipo": "xp",  "min": 2,"max": 4},
+                {"tipo": "oro", "min": 5,"max": 8}
             ]
         },
         {
@@ -52,21 +28,9 @@
             "probabilidad": 10,
             "color": "purple",
             "efectos": [
-                {
-                    "tipo": "daño",
-                    "min": 6,
-                    "max": 10
-                },
-                {
-                    "tipo": "xp",
-                    "min": 4,
-                    "max": 7
-                },
-                {
-                    "tipo": "oro",
-                    "min": 8,
-                    "max": 12
-                }
+                {"tipo": "daño","min": 6,"max": 10},
+                {"tipo": "xp","  min": 4,"max": 7},
+                {"tipo": "oro"," min": 8,"max": 12}
             ]
         },
         {
@@ -75,21 +39,9 @@
             "probabilidad": 5,
             "color": "green",
             "efectos": [
-                {
-                    "tipo": "daño",
-                    "min": 10,
-                    "max": 15
-                },
-                {
-                    "tipo": "xp",
-                    "min": 1,
-                    "max": 3
-                },
-                {
-                    "tipo": "oro",
-                    "min": 1,
-                    "max": 3
-                }
+                {"tipo": "daño","min": 10,"max": 15},
+                {"tipo": "xp",  "min": 1, "max": 3},
+                {"tipo": "oro", "min": 1, "max": 3}
             ]
         }
     ]

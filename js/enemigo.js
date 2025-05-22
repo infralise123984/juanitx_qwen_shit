@@ -8,14 +8,14 @@ function mostrarVidaEnemigo(enemigo) {
     const vidaText = document.createElement("div");
     vidaText.className = "vida-enemigo-text";
     vidaText.innerText = `${Math.max(0, Math.floor(enemigo.vida))}`;
-    vidaText.style.position = "absolute";
+    // vidaText.style.position = "absolute";
     vidaText.style.left = `${enemigo.x + 32}px`;
     vidaText.style.top = `${enemigo.y - 20}px`;
-    vidaText.style.color = "white";
-    vidaText.style.fontSize = "14px";
-    vidaText.style.fontWeight = "bold";
-    vidaText.style.textShadow = "1px 1px 2px black";
-    vidaText.style.pointerEvents = "none";
+    // vidaText.style.color = "white";
+    // vidaText.style.fontSize = "14px";
+    // vidaText.style.fontWeight = "bold";
+    // vidaText.style.textShadow = "1px 1px 2px black";
+    // vidaText.style.pointerEvents = "none";
     document.querySelector(".enemies-container").appendChild(vidaText);
     // Guardar referencia en el objeto enemigo
     enemigo.textoVida = vidaText;
@@ -52,7 +52,7 @@ function generarEnemigo() {
     const container = document.querySelector(".enemies-container");
 
     const img = document.createElement("img");
-    img.src = "enemigo.png";
+    img.src = "../img/enemigo.png";
     img.classList.add("enemigo");
     img.draggable = false;
 
@@ -127,15 +127,3 @@ function generarEnemigo() {
     mostrarVidaEnemigo(enemigos[enemigos.length - 1]); // Mostrar vida inicial
 }
 
-function mostrarDaño(daño, x, y, color = "red") {
-    const dañoText = document.createElement("div");
-    dañoText.className = "daño-text";
-    dañoText.innerText = `-${daño}`;
-    dañoText.style.left = `${x + 32}px`;
-    dañoText.style.top = `${y + 40}px`;
-    dañoText.style.color = color;
-    document.querySelector(".enemies-container").appendChild(dañoText);
-    setTimeout(() => {
-        dañoText.remove();
-    }, 1000);
-}

@@ -3,7 +3,7 @@ let personaje = {
     nivel: 1,
     xp: 0,
     xpParaSubir: 10,
-    oro: 1000,
+    oro: 100000,
     vidaMax: 100,
     vidaActual: 100,
     dañoAutomatico: 1,   // Daño automático cada X ms
@@ -18,7 +18,7 @@ let personaje = {
 };
 
 // Configuración del combate
-const RADIO_ATAQUE = 150; // radio en píxeles donde el personaje ataca
+let RADIO_ATAQUE = 150; // radio en píxeles donde el personaje ataca
 // Posición central del personaje (se calcula después)
 let PERSONAJE_X = 0;
 let PERSONAJE_Y = 0;
@@ -29,9 +29,9 @@ function atacarEnemigosCercanos() {
         if (!enemigo.vivo) return;
         let distancia = calcularDistancia(personajeX, personajeY, enemigo.x, enemigo.y);
         if (distancia <= RADIO_ATAQUE) {
-            enemigo.vida -= personaje.dañoAutomatico;
+            enemigo.vida -= personaje.dañoAutomatico*personaje.mult.daño;
             mostrarVidaEnemigo(enemigo);
-            mostrarDaño(personaje.dañoAutomatico, enemigo.x, enemigo.y, "blue");
+            mostrarDaño(personaje.dañoAutomatico*personaje.mult.daño, enemigo.x, enemigo.y, "blue");
             if (enemigo.vida <= 0) {
                 MostrarXP(enemigo.x, enemigo.y);
                 enemigo.vivo = false;

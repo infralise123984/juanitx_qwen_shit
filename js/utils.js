@@ -11,25 +11,25 @@ function actualizarUI() {
 
     // Mostrar daño automático y su bonus
     document.querySelector(".stat-dano-auto").textContent = personaje.dañoAutomatico;
-    const bonusDaño = obtenerBonusPorTipo("daño");
-    document.querySelector(".stat-dano-auto-bonus").textContent =
-        bonusDaño > 0 ? `X${bonusDaño} bonus` : "Sin bonus";
+    // const bonusDaño = obtenerBonusPorTipo("daño");
+    // document.querySelector(".stat-dano-auto-bonus").textContent =
+    //     bonusDaño > 0 ? `X${bonusDaño} bonus` : "Sin bonus";
 
     // Mostrar daño clic y su bonus
     document.querySelector(".stat-dano-click").textContent = personaje.dañoClick;
-    const bonusClick = obtenerBonusPorTipo("daño");
-    document.querySelector(".stat-dano-click-bonus").textContent =
-        bonusClick > 0 ? `  X${bonusClick} bonus` : "Sin bonus";
+    // const bonusClick = obtenerBonusPorTipo("daño");
+    // document.querySelector(".stat-dano-click-bonus").textContent =
+    //     bonusClick > 0 ? `  X${bonusClick} bonus` : "Sin bonus";
 
-    // Mostrar bonus de XP
-    const bonusXP = obtenerBonusPorTipo("xp");
-    document.querySelector(".stat-xp-bonus").textContent =
-        bonusXP > 0 ? ` X${bonusXP} bonus` : "Sin bonus";
+    // // Mostrar bonus de XP
+    // const bonusXP = obtenerBonusPorTipo("xp");
+    // document.querySelector(".stat-xp-bonus").textContent =
+    //     bonusXP > 0 ? ` X${bonusXP} bonus` : "Sin bonus";
 
-    // Mostrar bonus de oro
-    const bonusOro = obtenerBonusPorTipo("oro");
-    document.querySelector(".stat-oro-bonus").textContent =
-        bonusOro > 0 ? `    X${bonusOro} bonus` : "Sin bonus";
+    // // Mostrar bonus de oro
+    // const bonusOro = obtenerBonusPorTipo("oro");
+    // document.querySelector(".stat-oro-bonus").textContent =
+    //     bonusOro > 0 ? `    X${bonusOro} bonus` : "Sin bonus";
 }
 
 // Mostrar texto de XP ganada
@@ -76,4 +76,18 @@ function mostrarLevelUp(x, y) {
     setTimeout(() => {
         levelUpText.remove();
     }, 1500);
+}
+
+
+function mostrarDaño(daño, x, y, color = "red") {
+    const dañoText = document.createElement("div");
+    dañoText.className = "daño-text";
+    dañoText.innerText = `-${daño}`;
+    dañoText.style.left = `${x + 32}px`;
+    dañoText.style.top = `${y + 40}px`;
+    dañoText.style.color = color;
+    document.querySelector(".enemies-container").appendChild(dañoText);
+    setTimeout(() => {
+        dañoText.remove();
+    }, 1000);
 }
